@@ -1,4 +1,4 @@
-module golog
+module github.com/incident-center/golog
 
 go 1.20
 

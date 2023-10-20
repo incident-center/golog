@@ -32,9 +32,7 @@ func New(level string) (*Logger, error) {
 
 	sugar := logger.Sugar()
 
-	return &Logger{
-		logger: sugar,
-	}, nil
+	return &Logger{logger: sugar}, nil
 }
 
 func (l *Logger) Debug(message string, context map[string]any) {

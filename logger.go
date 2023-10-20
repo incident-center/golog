@@ -1,10 +1,12 @@
 package golog
 
 import (
+	"errors"
 	"fmt"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -27,7 +29,7 @@ func New(level string) (*Logger, error) {
 
 	logger := zap.Must(config.Build())
 	err := logger.Sync()
-	if err != nil {
+	if err != nil && !errors.Is(err, syscall.EINVAL) && !errors.Is(err, syscall.ENOTTY) {
 		return nil, err
 	}
 

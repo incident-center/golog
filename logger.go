@@ -18,6 +18,11 @@ type Interface interface {
 	Warn(message string, context map[string]any)
 	Error(message string, context map[string]any)
 	Fatal(message string, context map[string]any)
+	Debugf(message string, args ...interface{})
+	Infof(message string, args ...interface{})
+	Warnf(message string, args ...interface{})
+	Errorf(message string, args ...interface{})
+	Fatalf(message string, args ...interface{})
 }
 
 type Logger struct {
@@ -58,6 +63,26 @@ func (l *Logger) Error(message string, context map[string]any) {
 
 func (l *Logger) Fatal(message string, context map[string]any) {
 	l.logger.Fatalw(message, zap.Int("goid", l.goid()), zap.Any("context", context))
+}
+
+func (l *Logger) Debugf(message string, args ...interface{}) {
+	l.logger.Debugw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) Infof(message string, args ...interface{}) {
+	l.logger.Infow(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) Warnf(message string, args ...interface{}) {
+	l.logger.Warnw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) Fatalf(message string, args ...interface{}) {
+	l.logger.Fatalw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) Errorf(message string, args ...interface{}) {
+	l.logger.Errorw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
 }
 
 func getConfig(level string) zap.Config {

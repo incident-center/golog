@@ -18,11 +18,15 @@ type Interface interface {
 	Warn(message string, context map[string]any)
 	Error(message string, context map[string]any)
 	Fatal(message string, context map[string]any)
+	DPanic(message string, context map[string]any)
+	Panic(message string, context map[string]any)
 	Debugf(message string, args ...interface{})
 	Infof(message string, args ...interface{})
 	Warnf(message string, args ...interface{})
 	Errorf(message string, args ...interface{})
 	Fatalf(message string, args ...interface{})
+	DPanicf(message string, args ...interface{})
+	Panicf(message string, args ...interface{})
 }
 
 type Logger struct {
@@ -65,6 +69,14 @@ func (l *Logger) Fatal(message string, context map[string]any) {
 	l.logger.Fatalw(message, zap.Int("goid", l.goid()), zap.Any("context", context))
 }
 
+func (l *Logger) DPanic(message string, context map[string]any) {
+	l.logger.DPanicw(message, zap.Int("goid", l.goid()), zap.Any("context", context))
+}
+
+func (l *Logger) Panic(message string, context map[string]any) {
+	l.logger.Panicw(message, zap.Int("goid", l.goid()), zap.Any("context", context))
+}
+
 func (l *Logger) Debugf(message string, args ...interface{}) {
 	l.logger.Debugw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
 }
@@ -79,6 +91,14 @@ func (l *Logger) Warnf(message string, args ...interface{}) {
 
 func (l *Logger) Fatalf(message string, args ...interface{}) {
 	l.logger.Fatalw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) DPanicf(message string, args ...interface{}) {
+	l.logger.DPanicw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
+}
+
+func (l *Logger) Panicf(message string, args ...interface{}) {
+	l.logger.Panicw(fmt.Sprintf(message, args...), zap.Int("goid", l.goid()))
 }
 
 func (l *Logger) Errorf(message string, args ...interface{}) {
@@ -112,6 +132,12 @@ func getLevel(level string) zapcore.Level {
 		return zap.InfoLevel
 	case "debug":
 		return zap.DebugLevel
+	case "dpanic":
+		return zap.DPanicLevel
+	case "panic":
+		return zap.PanicLevel
+	case "fatal":
+		return zap.FatalLevel
 	default:
 		return zap.InfoLevel
 	}

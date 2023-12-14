@@ -1,0 +1,15 @@
+TODO*
+documents
+coverage.txt
+_book
+.idea
+vendor
+.vscode
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+go.work
